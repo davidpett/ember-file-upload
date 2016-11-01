@@ -94,7 +94,7 @@ export default Ember.Service.extend({
     @default 0
     @readonly
    */
-  size: sumBy('files', 'size'),
+  size: sumBy('files.@each.size'),
 
   /**
     The number of bytes that have been uploaded to the server.
@@ -104,7 +104,7 @@ export default Ember.Service.extend({
     @default 0
     @readonly
    */
-  loaded: sumBy('files', 'loaded'),
+  loaded: sumBy('files.@each.loaded'),
 
   /**
     The current progress of all uploads, as a percentage in the

@@ -165,7 +165,7 @@ export default Ember.Object.extend({
     @type {Number}
     @default 0
    */
-  size: sumBy('files', 'size'),
+  size: sumBy('files.@each.size'),
 
   /**
     The aggregate amount of bytes that have been uploaded
@@ -176,7 +176,7 @@ export default Ember.Object.extend({
     @type {Number}
     @default 0
    */
-  loaded: sumBy('files', 'loaded'),
+  loaded: sumBy('files.@each.loaded'),
 
   /**
     The current upload progress of the queue, as a number from 0 to 100.

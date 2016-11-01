@@ -49,6 +49,7 @@ export default Ember.Helper.extend({
     let queues = get(this, 'fileQueue');
     let queueName = hash['for'];
     if (queueName) {
+      // delete hash['for'];
       let queue = queues.find(queueName) ||
                   queues.create(queueName);
       queue.setProperties(hash);

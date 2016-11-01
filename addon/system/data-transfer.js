@@ -15,10 +15,7 @@ export default Ember.Object.extend({
         return true;
       }
 
-      return (
-        get(this, 'dataTransfer.items.length') ||
-        get(this, 'dataTransfer.files.length')
-      ) === get(this, 'files.length');
+      return get(this, 'dataTransfer.items.length') === get(this, 'files.length');
     }
   }),
 
@@ -27,9 +24,8 @@ export default Ember.Object.extend({
       let fileList = get(this, 'dataTransfer.files');
       let itemList = get(this, 'dataTransfer.items');
 
-      if ((fileList == null && itemList) ||
-          (itemList != null && fileList != null &&
-           itemList.length > fileList.length)) {
+      if (fileList && itemList &&
+          itemList.length > fileList.length) {
         fileList = itemList;
       }
 
@@ -37,7 +33,7 @@ export default Ember.Object.extend({
         return null;
       }
 
-      let files = Ember.A();
+      let files = [];
       if (!get(this, 'queue.multiple') && fileList.length > 1) {
         files.push(fileList[0]);
       } else {
@@ -46,22 +42,18 @@ export default Ember.Object.extend({
         }
       }
 
-      let accept = get(this, 'queue.accept');
-      if (accept == null) {
-        return files;
-      }
-
-      let tokens = Ember.A(accept.split(',').map(function (token) {
+      let accept = get(this, 'queue.accept') || '';
+      let tokens = accept.split(',').map(function (token) {
         return trim(token).toLowerCase();
-      }));
-      let extensions = Ember.A(tokens.filter(function (token) {
+      });
+      let extensions = tokens.filter(function (token) {
         return token.indexOf('.') === 0;
-      }));
-      let mimeTypes = Ember.A(Ember.A(tokens.filter(function (token) {
+      });
+      let mimeTypes = tokens.filter(function (token) {
         return token.indexOf('.') !== 0;
-      })).map(function (mimeType) {
+      }).map(function (mimeType) {
         return new RegExp(mimeType);
-      }));
+      });
 
       return files.filter(function (file) {
         let extension = null;
@@ -76,4 +68,5 @@ export default Ember.Object.extend({
       });
     }
   })
+
 });

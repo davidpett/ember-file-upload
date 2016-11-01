@@ -1,12 +1,17 @@
 import Ember from 'ember';
 
-var { get, computed } = Ember;
+const { get, computed } = Ember;
 
-export default function (collectionKey, itemKey) {
-  return computed(`${collectionKey}.@each.${itemKey}`, function () {
-    let collection = get(this, collectionKey);
+export default function(dependentKey) {
+  let [collectionKey, itemKey] = dependentKey.split('.@each.');
 
-    return collection.reduce(function (sum, item) {
+  return computed(dependentKey, function() {
+    let collection = this;
+    if (collectionKey) {
+      collection = get(this, collectionKey);
+    }
+
+    return collection.reduce((sum, item) => {
       return sum + get(item, itemKey);
     }, 0);
   });
